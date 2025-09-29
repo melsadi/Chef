@@ -12,11 +12,13 @@ export type Language = 'en' | 'ar';
 const translations = {
   en: {
     headerTitle: "Elsadi Chef",
+    headline: "Turn your fridge into dinner.",
     kitchenInventory: "Your Kitchen Inventory",
     inventoryDescription: "Add the ingredients you have on hand, and let our AI chef work its magic!",
     addIngredientPlaceholder: "e.g., Chicken breast, Bell peppers",
     addButton: "Add",
     ingredientsAppearHere: "Your ingredients will appear here...",
+    preButtonText: "Every ingredient you add brings you closer to a special recipe!",
     generateButton: "Generate Recipes",
     generatingButton: "Crafting Deliciousness...",
     loadingMessage: "Consulting with the AI Chef...",
@@ -30,11 +32,13 @@ const translations = {
   },
   ar: {
     headerTitle: "الشيف الصادي",
+    headline: "مطبخك بين يديك: أضف مكوناتك — ودعينا نطبخ لك وصفة لذيذة!",
     kitchenInventory: "محتويات مطبخك",
     inventoryDescription: "أضف المكونات المتوفرة لديك، ودع طاهينا الذكي يبدع!",
     addIngredientPlaceholder: "مثال: صدر دجاج، فلفل حلو",
     addButton: "إضافة",
     ingredientsAppearHere: "ستظهر مكوناتك هنا...",
+    preButtonText: "كل مكون تضيفيه يقرّبك أكثر لوصفة مميزة!",
     generateButton: "إنشاء وصفات",
     generatingButton: "جاري تحضير الأطباق...",
     loadingMessage: "جاري استشارة الشيف الذكي...",
@@ -97,11 +101,18 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
+    <div className="min-h-screen text-gray-800 flex flex-col">
       <Header t={t} language={language} setLanguage={setLanguage} />
       <main className="flex-grow container mx-auto px-4 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 transition-all duration-300 text-left rtl:text-right">
+
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-white [text-shadow:_0_2px_4px_rgb(0_0_0_/_50%)] leading-tight">
+              {t('headline')}
+            </h1>
+          </div>
+
+          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 md:p-8 transition-all duration-300 text-left rtl:text-right">
             <h2 className="text-2xl md:text-3xl font-bold text-gray-700 mb-2">{t('kitchenInventory')}</h2>
             <p className="text-gray-500 mb-6">{t('inventoryDescription')}</p>
             
@@ -111,8 +122,10 @@ const App: React.FC = () => {
               onRemoveIngredient={handleRemoveIngredient}
               t={t}
             />
+            
+            <p className="text-center text-gray-600 mt-6 mb-4">{t('preButtonText')}</p>
 
-            <div className="mt-8 text-center">
+            <div className="text-center">
               <button
                 onClick={handleGenerateRecipes}
                 disabled={isLoading || ingredients.length === 0}
@@ -131,8 +144,12 @@ const App: React.FC = () => {
           )}
 
           <div className="mt-12">
-            {isLoading && <LoadingSpinner t={t} />}
-            {recipes.length > 0 && <RecipeDisplay recipes={recipes} t={t}/>}
+            {isLoading && (
+              <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-6 md:p-8">
+                <LoadingSpinner t={t} />
+              </div>
+            )}
+            {!isLoading && recipes.length > 0 && <RecipeDisplay recipes={recipes} t={t}/>}
           </div>
         </div>
       </main>
